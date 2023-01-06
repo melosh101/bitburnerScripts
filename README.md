@@ -20,7 +20,7 @@ export async function main(ns) {
   if (ns.getHostname() !== "home") {
     throw new Exception("Run the script from home");
   }
-
+  ns.rm("update.js");
   await ns.wget(
     `https://raw.githubusercontent.com/melosh101/bitburnerScripts/master/src/update.js?ts=${new Date().getTime()}`,
     "update.js"
