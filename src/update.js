@@ -30,7 +30,9 @@ var downloadedVersion = 0;
  */
 function getCurretVersion(ns) {
   try {
-    return JSON.parse(ns.read("version.txt"));
+    var toReturn = JSON.parse(ns.read("version.txt"));
+    ns.tprint(toReturn)
+    return toReturn
   } catch (error) {
     return undefined;
   }
@@ -57,15 +59,15 @@ async function shouldUpdate(ns) {
   if(nextVersion === undefined) throw Exception("could fetch latest version");
   downloadedVersion = nextVersion.version;
   if(currentVersion === undefined) {
-    ns.write("version.txt", nextVersion.toString())
+    ns.write("version.txt", nextVersion.toString(), "w");
   }
   if(ns.args[0] && ns.args[0].toLowerCase() === "-f") {
-    ns.write("version.txt", nextVersion.toString());
+    ns.write("version.txt", nextVersion.toString(), "w");
     return true;
   }
   if(!nextVersion.updaterVersion === undefined || nextVersion.updaterVersion >= currentVersion.updaterVersion) throw Exception("please update the updater by rerunning the start.js script from \"https://github.com/melosh101/bitburnerScripts/blob/master/README.md\"")
   if(currentVersion.version > nextVersion.version) {
-    await ns.write("version.txt", nextVersion.toString());
+    ns.write("version.txt", nextVersion.toString(), "w");
     return true;
   }
   return false;
