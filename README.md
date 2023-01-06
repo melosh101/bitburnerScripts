@@ -20,7 +20,7 @@ export async function main(ns) {
   if (ns.getHostname() !== "home") {
     throw new Exception("Run the script from home");
   }
-  ns.rm("update.js");
+  const rmUpdate = ns.rm("update.js");
   ns.tprint("getting update.js")
   await ns.wget(
     `https://raw.githubusercontent.com/melosh101/bitburnerScripts/master/src/update.js?ts=${new Date().getTime()}`,
@@ -31,3 +31,7 @@ export async function main(ns) {
 ```
 
 3. Exit the nano and write in console: `run start.js`
+
+## Updating
+1. make sure you are in on the home server
+2. `run update.js`, will update. if the updater throws and error, please reinstall everything following [instalation](#instalation) guide
