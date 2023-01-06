@@ -27,7 +27,7 @@ function localeHHMMSS(ms = 0) {
  */
 async function shouldUpdate(ns) {
   const versionString = ns.read("version.txt");
-  if(versionString === "") return true;
+  if(versionString === "" || ns.args[0].toLowerCase() === "-f") return true;
   const currentVersion = JSON.parse(versionString);
   const nextVersion = fetch(`${baseUrl}version.json`).then((res) => res.json())
   if(!nextVersion.updaterVersion === undefined || nextVersion.updaterVersion > currentVersion.updaterVersion) throw Exception("please update the updater by rerunning the start.js script from \"https://github.com/melosh101/bitburnerScripts/blob/master/README.md\"")
@@ -45,7 +45,6 @@ async function shouldUpdate(ns) {
  * @param {NS} ns
  */
 export async function main(ns) {
-  var force = ns.args[0]? ns.args[0].toLowerCase() == "-f" : false;
   ns.tprint(`[${localeHHMMSS()}] Starting updater`)
 
   let hostname = ns.getHostname()
