@@ -30,11 +30,11 @@ async function shouldUpdate(ns) {
   if(versionString === "") return true;
   const currentVersion = JSON.parse(versionString);
   const nextVersion = fetch(`${baseUrl}version.json`).then((res) => res.json())
-  if(!nextVersion.updaterVersion === undefined || nextVersion.updaterVersion > currentVersion.updaterVersion) throw Exception("please update the updater by rerunning the start.js script from \"https://github.com/melosh101/bitburnerScripts/blob/master/README.md\"")
   if(ns.args[0].toLowerCase() === "-f") {
     ns.write("version.txt", nextVersion.toString());
     return true;
   }
+  if(!nextVersion.updaterVersion === undefined || nextVersion.updaterVersion > currentVersion.updaterVersion) throw Exception("please update the updater by rerunning the start.js script from \"https://github.com/melosh101/bitburnerScripts/blob/master/README.md\"")
   if(currentVersion.version > nextVersion.version) {
     await ns.write("version.txt", nextVersion.toString());
     return true;
