@@ -26,7 +26,7 @@ function localeHHMMSS(ms = 0) {
  * @returns {Boolean} true if it should update
  */
 async function shouldUpdate(ns) {
-  const versionString = ns.read(version.txt);
+  const versionString = ns.read("version.txt");
   if(versionString = "") return true;
   const currentVersion = JSON.parse(versionString);
   const nextVersion = fetch(`${baseUrl}version.json`).then((res) => res.json())
