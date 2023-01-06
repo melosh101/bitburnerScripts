@@ -22,10 +22,10 @@ export async function main(ns) {
   }
 
   await ns.wget(
-    `https://raw.githubusercontent.com/moriakaice/bitburner/master/src/initHacking.js?ts=${new Date().getTime()}`,
-    "initHacking.js"
+    `https://raw.githubusercontent.com/melosh101/bitburnerScripts/master/src/update.js?ts=${new Date().getTime()}`,
+    "update.js"
   );
-  ns.spawn("initHacking.js", 1);
+  ns.spawn("update.js", 1);
 }
 ```
 
