@@ -34,6 +34,7 @@ function getCurretVersion(ns) {
     ns.tprint(toReturn)
     return toReturn
   } catch (error) {
+    ns.tprint("failed to get version.txt")
     return undefined;
   }
 } 
