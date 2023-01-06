@@ -22,7 +22,7 @@ function localeHHMMSS(ms = 0) {
 }
 
 export async function main(ns) {
-  ns.tprint(`[${localeHHMMSS()}] Starting initHacking.js`)
+  ns.tprint(`[${localeHHMMSS()}] Starting updater`)
 
   let hostname = ns.getHostname()
 
