@@ -53,7 +53,7 @@ export async function main(ns) {
     throw new Exception('Run the script from home')
   }
   
-  if(!force && await !shouldUpdate(ns)) return ns.tprint("no need to update. add -f if you want to force an update");
+  if(await !shouldUpdate(ns)) return ns.tprint("no need to update. add -f if you want to force an update");
 
   for (let i = 0; i < filesToDownload.length; i++) {
     const filename = filesToDownload[i]
