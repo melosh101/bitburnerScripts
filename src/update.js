@@ -1,3 +1,4 @@
+import version from "./version.json";
 const baseUrl = "https://raw.githubusercontent.com/melosh101/bitburnerScripts/master/src/"
 const filesToDownload = [
   'common.js',
@@ -20,8 +21,28 @@ function localeHHMMSS(ms = 0) {
 
   return new Date(ms).toLocaleTimeString()
 }
+/**
+ * check if updater should update
+ * @param {NS} ns
+ * @returns {Boolean} true if it should update
+ */
+async function shouldUpdate(ns) {
+  const versionString = ns.read(version.txt);
+  if(versionString = "") return true;
+  const currentVersion = JSON.parse(versionString);
+  const nextVersion = fetch(`${baseUrl}version.json`).then((res) => res.json())
+  if(currentVersion <= nextVersion) return true;
+  return false;
 
+}
+
+/**
+ * updater function.
+ * also installs if files are missing
+ * @param {NS} ns
+ */
 export async function main(ns) {
+  if(!shouldUpdate) return ns.tprint("no need to update");
   ns.tprint(`[${localeHHMMSS()}] Starting updater`)
 
   let hostname = ns.getHostname()
