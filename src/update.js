@@ -1,3 +1,12 @@
+/**
+ * Version typeDef
+ * @typedef {Object} Version
+ * @property {Number} version - current scripts version
+ * @property {Number} updaterVersion - current version of the updater script
+ */
+
+
+
 const baseUrl = "https://raw.githubusercontent.com/melosh101/bitburnerScripts/master/src/"
 const filesToDownload = [
   'common.js',
@@ -12,6 +21,20 @@ const filesToDownload = [
   'find.js',
 ]
 const valuesToRemove = ['BB_SERVER_MAP']
+var downloadedVersion = 0;
+
+/**
+ * 
+ * @param {NS} ns 
+ * @returns {Version | undefined} the currently installed version in game
+ */
+function getCurretVersion(ns) {
+  try {
+    return JSON.parse(ns.read("version.txt"));
+  } catch (error) {
+    return undefined;
+  }
+} 
 
 function localeHHMMSS(ms = 0) {
   if (!ms) {
@@ -20,21 +43,27 @@ function localeHHMMSS(ms = 0) {
 
   return new Date(ms).toLocaleTimeString()
 }
+
+
 /**
  * check if updater should update
  * @param {NS} ns
  * @returns {Boolean} true if it should update
  */
 async function shouldUpdate(ns) {
-  const versionString = ns.read("version.txt");
-  if(versionString === "") return true;
-  const currentVersion = JSON.parse(versionString);
-  const nextVersion = fetch(`${baseUrl}version.json`).then((res) => res.json())
+  
+  const currentVersion = getCurretVersion(ns);
+  const nextVersion = await fetch(`${baseUrl}version.json`).then((res) => res.json())
+  if(nextVersion === undefined) throw Exception("could fetch latest version");
+  downloadedVersion = nextVersion.version;
+  if(currentVersion === undefined) {
+    ns.write("version.txt", nextVersion.toString())
+  }
   if(ns.args[0].toLowerCase() === "-f") {
     ns.write("version.txt", nextVersion.toString());
     return true;
   }
-  if(!nextVersion.updaterVersion === undefined || nextVersion.updaterVersion > currentVersion.updaterVersion) throw Exception("please update the updater by rerunning the start.js script from \"https://github.com/melosh101/bitburnerScripts/blob/master/README.md\"")
+  if(!nextVersion.updaterVersion === undefined || nextVersion.updaterVersion >= currentVersion.updaterVersion) throw Exception("please update the updater by rerunning the start.js script from \"https://github.com/melosh101/bitburnerScripts/blob/master/README.md\"")
   if(currentVersion.version > nextVersion.version) {
     await ns.write("version.txt", nextVersion.toString());
     return true;
@@ -58,7 +87,8 @@ export async function main(ns) {
   }
   
   if(await !shouldUpdate(ns)) return ns.tprint("no need to update. add -f if you want to force an update");
-
+  const {commit: {message}} = await fetch("https://api.github.com/repos/melosh101/bitburnerscripts/commits/master").then((res) => res.json())
+  ns.tprint(`now downloading script version: ${downloadedVersion}`)
   for (let i = 0; i < filesToDownload.length; i++) {
     const filename = filesToDownload[i]
     const path = baseUrl + filename
