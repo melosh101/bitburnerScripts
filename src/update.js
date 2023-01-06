@@ -1,4 +1,3 @@
-import version from "./version.json";
 const baseUrl = "https://raw.githubusercontent.com/melosh101/bitburnerScripts/master/src/"
 const filesToDownload = [
   'common.js',

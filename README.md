@@ -21,6 +21,7 @@ export async function main(ns) {
     throw new Exception("Run the script from home");
   }
   ns.rm("update.js");
+  ns.tprint("getting update.js")
   await ns.wget(
     `https://raw.githubusercontent.com/melosh101/bitburnerScripts/master/src/update.js?ts=${new Date().getTime()}`,
     "update.js"
