@@ -31,7 +31,10 @@ async function shouldUpdate(ns) {
   if(versionString = "") return true;
   const currentVersion = JSON.parse(versionString);
   const nextVersion = fetch(`${baseUrl}version.json`).then((res) => res.json())
-  if(currentVersion <= nextVersion) return true;
+  if(currentVersion > nextVersion) {
+    await ns.write("version.txt", nextVersion.toString());
+    return true;
+  }
   return false;
 
 }
@@ -42,7 +45,7 @@ async function shouldUpdate(ns) {
  * @param {NS} ns
  */
 export async function main(ns) {
-  if(!shouldUpdate) return ns.tprint("no need to update");
+  var force = args[0]? args[0].toLowerCase() == "-f" : false;
   ns.tprint(`[${localeHHMMSS()}] Starting updater`)
 
   let hostname = ns.getHostname()
@@ -50,6 +53,8 @@ export async function main(ns) {
   if (hostname !== 'home') {
     throw new Exception('Run the script from home')
   }
+  
+  if(!force && await !shouldUpdate(ns)) return ns.tprint("no need to update. add -f if you want to force an update");
 
   for (let i = 0; i < filesToDownload.length; i++) {
     const filename = filesToDownload[i]
