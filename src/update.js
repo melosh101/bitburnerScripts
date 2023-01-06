@@ -59,7 +59,7 @@ async function shouldUpdate(ns) {
   if(currentVersion === undefined) {
     ns.write("version.txt", nextVersion.toString())
   }
-  if(ns.args[0].toLowerCase() === "-f") {
+  if(ns.args[0] && ns.args[0].toLowerCase() === "-f") {
     ns.write("version.txt", nextVersion.toString());
     return true;
   }
