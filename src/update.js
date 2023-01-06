@@ -44,7 +44,7 @@ async function shouldUpdate(ns) {
  * @param {NS} ns
  */
 export async function main(ns) {
-  var force = args[0]? args[0].toLowerCase() == "-f" : false;
+  var force = ns.args[0]? ns.args[0].toLowerCase() == "-f" : false;
   ns.tprint(`[${localeHHMMSS()}] Starting updater`)
 
   let hostname = ns.getHostname()
